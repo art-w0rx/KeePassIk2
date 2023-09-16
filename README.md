@@ -1,10 +1,6 @@
 # KeePassIk2
-Updated version of the password manager.
-In this version, I removed the unnecessary function associated with the key file, 
-since it does not really carry a useful function. 
-The system of working with an encrypted file has also been redesigned, 
-now the decrypted data is stored in ram, and not in temporary files. 
-A small optimization of accesses to the encrypted file has also been carried out. 
-Now the databases are stored with the extension .nfr instead of .xlsm.
-I am Russian, and I did the program for myself in the first place, 
-and the localization of this program is still only in Russian.
+Updated version of the password manager. In this version, I removed an unnecessary function related to the key file, since it doesn't actually carry a useful function. The system of working with an encrypted file has also been redesigned, now the decrypted data is stored in RAM, not in temporary files. There was also a small optimization of access to the encrypted file. Now databases are stored with the extension .nfr instead .xlsm, if there are files with other extensions in the bases folder, they will not be displayed in the program. The encryption key input system has also been redesigned, now the key is converted into digits and additionally encrypted.
+Russian Russian, and first of all I was making a program for myself, and the localization of this program is still only in Russian.
+
+Обновленная версия менеджера паролей. В этой версии я удалил ненужную функцию, связанную с файлом ключей, поскольку на самом деле она не несет полезной функции. Система работы с зашифрованным файлом также была переработана, теперь расшифрованные данные хранятся в оперативной памяти, а не во временных файлах. Также была проведена небольшая оптимизация доступа к зашифрованному файлу. Теперь базы данных хранятся с расширением .nfr вместо .xlsm, если в папке bases будут файлы с другими расширениями в программе они отображаться не будут. Также была переработана система ввода ключа шифрования, теперь ключ переводится в цифры и дополнительно шифруется.
+Я русский, и в первую очередь я делал программу для себя, и локализация этой программы по-прежнему только на русском языке.
