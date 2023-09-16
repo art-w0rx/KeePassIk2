@@ -2,7 +2,7 @@
 import io
 import os
 import simplecrypt
-import tempfile
+import stdiomask
 import getpass
 import openpyxl
 from openpyxl import Workbook, load_workbook
@@ -16,7 +16,7 @@ start_dir = os.chdir('bases')
 def start_menu():
 	os.system('clear')
 	list_start_dir = os.listdir()
-	clear_list = [element.replace('.nfr', '') for element in list_start_dir]
+	clear_list = [element.replace('.nfr', '') for element in list_start_dir if element.endswith('.nfr')]
 	print("")
 	print("\033[5;1;33;45m KeePassIc \033[0m")
 	print("")
@@ -79,7 +79,19 @@ def add_pass_base_menu():
 		print("\033[31mБаза с таким именем уже есть! Пвоторите попытку\033[0m")
 		add_pass_base_menu()
 	else:	
-		pas_input = getpass.getpass("Введите ключ шифрования: ")		
+		pas_input = stdiomask.getpass("Введите ключ шифрования: ")		
+		cr_pas_nums = [] #Переводим наш ключ в числовую комбинацию
+		for char in pas_input:
+			cr_pas_num = ord(char)
+			cr_pas_nums.append(cr_pas_num)
+		try:
+			cr_end_num = int(''.join(map(str, cr_pas_nums)))
+		except:
+			print("\n\033[31mКлюч не может быть пустым! Пвоторите попытку\033[0m")
+			add_pass_base_menu()		
+		cr_sum_num = cr_end_num * 2.78 + (3.567*4.12) *4.58 # Здесь можете указать любую математическу операцию, это будет алгоритмом скрытия ключа
+		cr_form_pas = "{:.15f}".format(cr_sum_num)
+		cr_dat_pas = cr_form_pas + 'qpZm19.3' + pas_input # Итоговый ключ в ковычки можете добавить любую комбинацию символов	
 		if pas_input == '':
 			print("\033[31mКлюч шифрования не может быть пустым\033[0m")
 			add_pass_base_menu()
@@ -96,7 +108,7 @@ def add_pass_base_menu():
 		wb.save(data)
 		data.seek(0)
 		txt = data.read()
-		pas = pas_input
+		pas = cr_dat_pas
 		print("\n\033[32mПодождите идет создание базы паролей\033[0m")	
 		cipher = simplecrypt.encrypt(pas, txt)
 		data.close()		
@@ -182,7 +194,19 @@ def cha_key_base_pase():
 		os.system('clear')
 		exit()
 	else:
-		check_key_base_pase = getpass.getpass("Введите ключ шифрования базы паролей: ")
+		check_key_base_pase = stdiomask.getpass("Введите ключ шифрования базы паролей: ")
+		chk_pas_nums = [] # Переводим ключ в комбинацию чисел
+		for char in check_key_base_pase:
+			chk_pas_num = ord(char)
+			chk_pas_nums.append(chk_pas_num)
+		try:
+			chk_end_num = int(''.join(map(str, chk_pas_nums)))
+		except:
+			print("\n\033[31mКлюч не может быть пустым! Пвоторите попытку\033[0m")
+			cha_key_base_pase()		
+		chk_sum_num = chk_end_num * 2.78 + (3.567*4.12) *4.58 # Здесь можете указать любую математическу операцию, это будет алгоритмом скрытия ключа
+		check_key_base_form_pas = "{:.15f}".format(chk_sum_num)
+		chk_dat_pas = check_key_base_form_pas + 'qpZm19.3' + check_key_base_pase # Итоговый ключ в ковычки можете добавить любую комбинацию символов	
 		if check_key_base_pase == '':
 			print("\033[31mКлюч шифрования не может быть пустым\033[0m")
 			os.chdir('..')
@@ -197,7 +221,7 @@ def cha_key_base_pase():
 			cha_key_base_pase()
 		inf = fil.read()
 		fil.close()
-		pas = check_key_base_pase
+		pas = chk_dat_pas
 		print("\n\033[32mПодождите идет проверка ключа базы паролей\033[0m\n")	
 		try:
 			cipher_open_base = simplecrypt.decrypt(pas,inf)
@@ -206,16 +230,28 @@ def cha_key_base_pase():
 			os.chdir('..')
 			os.chdir('bases')
 			cha_key_base_pase()
-		new_key_base_pase = getpass.getpass("Введите новый ключ шифрования базы паролей:")
+		new_key_base_pase = stdiomask.getpass("Введите новый ключ шифрования базы паролей: ")
+		new_pas_nums = [] #Переводим новый ключ в числа
+		for char in new_key_base_pase:
+			new_pas_num = ord(char)
+			new_pas_nums.append(new_pas_num)
+		try:
+			new_end_num = int(''.join(map(str, new_pas_nums)))
+		except:
+			print("\n\033[31mКлюч не может быть пустым! Пвоторите попытку\033[0m")
+			cha_key_base_pase()		
+		new_sum_num = new_end_num * 2.78 + (3.567*4.12) *4.58 # Здесь можете указать любую математическу операцию, это будет алгоритмом скрытия ключа
+		new_key_base_form_pas = "{:.15f}".format(new_sum_num)
+		new_dat_pas = new_key_base_form_pas + 'qpZm19.3' + new_key_base_pase # Итоговый ключ в ковычки можете добавить любую комбинацию символов	
 		if new_key_base_pase == '':
 			print("\033[31mКлюч шифрования не может быть пустым\033[0m")
 			os.chdir('..')
 			os.chdir('bases')
 			cha_key_base_pase()
-		new_pas = new_key_base_pase
+		new_pas = new_dat_pas
 		new_text = cipher_open_base
 		print ("\033[32m\nПодождите идет изменение ключа базы паролей\033[0m")
-		cipher_new_base = simplecrypt.encrypt(new_pas,new_text)	
+		cipher_new_base = simplecrypt.encrypt(new_pas, new_text)	
 		crypt = open(menu + '.nfr', 'wb')
 		crypt.write(cipher_new_base)
 		crypt.close()
@@ -247,8 +283,21 @@ def open_pass_base_menu():
 		print ("\033[31mИмя не может быть пустым\033[0m")
 		open_pass_base_menu()
 	else:
-		global key_pass_base
-		key_pass_base = getpass.getpass("Введите ключ шифрования: ")
+		global op_dat_pas
+		key_pass_base = stdiomask.getpass("Введите ключ шифрования: ")
+		op_pas_nums = [] #Переводим ключ в цифры
+		for char in key_pass_base:
+			op_pas_num = ord(char)
+			op_pas_nums.append(op_pas_num)
+		try:
+			op_end_num = int(''.join(map(str, op_pas_nums)))
+		
+		except:
+			print("\n\033[31mКлюч не может быть пустым! Пвоторите попытку\033[0m")
+			open_pass_base_menu()	
+		op_sum_num = op_end_num * 2.78 + (3.567*4.12) *4.58 # Здесь можете указать любую математическу операцию, это будет алгоритмом скрытия ключа
+		op_key_form_pas_base = "{:.15f}".format(op_sum_num)
+		op_dat_pas = op_key_form_pas_base + 'qpZm19.3' + key_pass_base # Итоговый ключ в ковычки можете добавить любую комбинацию символов
 		work_with_pass_base()
 		
 # Блок работы с базой паролей
@@ -264,7 +313,7 @@ def work_with_pass_base():
 			open_pass_base_menu()	
 	inf = fil.read()
 	fil.close()
-	pas = key_pass_base
+	pas = op_dat_pas
 	print("\n\033[32mПодождите идет открытие базы паролей\033[0m\n")
 	try:	
 		cipher_open_base = simplecrypt.decrypt(pas,inf)
@@ -360,7 +409,7 @@ def del_acc():
 			sv2 = base_pase.save(data)
 			data.seek(0)
 			txt = data.read()
-			pas = key_pass_base
+			pas = op_dat_pas
 			print("\n\033[32mПодождите идет удаление аккаунта\033[0m")	
 			cipher = simplecrypt.encrypt(pas, txt)
 			data.close()
@@ -396,7 +445,7 @@ def create_acc():
 	sv2 = base_pase.save(data)
 	data.seek(0)
 	txt = data.read()
-	pas = key_pass_base
+	pas = op_dat_pas
 	print("\n\033[32mПодождите идет сохранение аккаунта\033[0m")	
 	cipher = simplecrypt.encrypt(pas, txt)
 	data.close()
@@ -432,7 +481,7 @@ def chan_acc_name():
 	data.seek(0)
 	txt = data.read()
 	data.close()
-	pas = key_pass_base
+	pas = op_dat_pas
 	print("\n\033[32mПодождите идет сохранение изменений\033[0m")	
 	cipher = simplecrypt.encrypt(pas, txt)
 	fin = open(open_pass_base_menu_do + '.nfr', 'wb')
@@ -450,7 +499,7 @@ def chan_acc_log():
 	data.seek(0)
 	txt = data.read()
 	data.close()
-	pas = key_pass_base
+	pas = op_dat_pas
 	print("\n\033[32mПодождите идет сохранение изменений\033[0m")	
 	cipher = simplecrypt.encrypt(pas, txt)
 	fin = open(open_pass_base_menu_do + '.nfr', 'wb')
@@ -468,7 +517,7 @@ def chan_acc_pas():
 	data.seek(0)	
 	txt = data.read()
 	data.close()
-	pas = key_pass_base
+	pas = op_dat_pas
 	print("\n\033[32mПодождите идет сохранение изменений\033[0m")	
 	cipher = simplecrypt.encrypt(pas, txt)
 	fin = open(open_pass_base_menu_do + '.nfr', 'wb')
@@ -486,7 +535,7 @@ def chan_acc_add():
 	data.seek(0)
 	txt = data.read()
 	data.close()
-	pas = key_pass_base
+	pas = op_dat_pas
 	print("\n\033[32mПодождите идет сохранение изменений\033[0m")	
 	cipher = simplecrypt.encrypt(pas, txt)
 	fin = open(open_pass_base_menu_do + '.nfr', 'wb')
